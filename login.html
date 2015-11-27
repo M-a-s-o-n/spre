@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel='shortcut icon' href='http://gdurl.com/Uotw' type='image/x-icon' />
+	<title>Spre.io Login</title>
+</head>
+<style>
+	#html {
+		background-color: whitesmoke;
+		font-family: 'Lato', sans-serif;
+	}
+	
+	#group {
+		border-radius: 5px;
+		background-color: rgb(212, 212, 212);
+		width: 200px;
+		height: 20px;
+		font-size: 17px;
+	}
+	
+	#groupPage {
+		width: 500px;
+		height: 500px;
+		background-color: rgb(54, 51, 48);
+		color: whitesmoke;
+		font-size: 30px;
+	}
+	
+	#results {
+		/*#c30000*/
+		/*rgb(50, 200, 10)*/
+		margin-top: 5px;
+		width: 300px;
+		height: 40px;
+	}
+	
+	button {
+		width: 40px;
+		height: 40px;
+	}
+	
+	#buttons {
+		margin-top: 30px;
+	}
+	
+	.box {
+		background-color: whitesmoke;
+		width: 40px;
+		height: 40px;
+		display: inline-block;
+		margin: 2.5px;
+		color: rgb(54, 51, 48);
+	}
+	a {
+		color: whitesmoke;
+	}
+</style>
+
+<body>
+	<center>
+		<div id="groupPage">
+			Choose Your Group
+			<br/>
+			<input type="text" id="group" placeholder="Group Name" />
+			<div id="results"></div>
+			<div id="password" style="opacity:0;">
+				<div id="boxes">
+					<div id="b1" class="box"></div>
+					<div id="b2" class="box"></div>
+					<div id="b3" class="box"></div>
+					<div id="b4" class="box"></div>
+				</div>
+
+				<div id="buttons">
+					<div id="top">
+						<button onclick="click1()">1</button>
+						<button onclick="click2()">2</button>
+						<button onclick="click3()">3</button>
+					</div>
+					<div id="middle">
+						<button onclick="click4()">4</button>
+						<button onclick="click5()">5</button>
+						<button onclick="click6()">6</button>
+					</div>
+					<div id="bottem">
+						<button onclick="click7()">7</button>
+						<button onclick="click8()">8</button>
+						<button onclick="click9()">9</button>
+					</div>
+					<div id="zero">
+						<button onclick="click0()">0</button>
+					</div>
+				</div>
+			</div>
+			or
+			<br/>
+			<a href="http://192.168.0.152:8080/create/">Create One</a>
+		</div>
+	</center>
+</body>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
+<script>
+	function click1(){
+		type("1")
+	}
+	function click2(){
+		type("2")
+	}
+	function click3(){
+		type("3")
+	}
+	function click4(){
+		type("4")
+	}
+	function click5(){
+		type("5")
+	}
+	function click6(){
+		type("6")
+	}
+	function click7(){
+		type("7")
+	}
+	function click8(){
+		type("8")
+	}
+	function click9(){
+		type("9")
+	}
+	function click0(){
+		type("0")
+	}
+	document.getElementById("group").addEventListener("input", function (e){
+				var text = document.getElementById("group").value
+				groupSearch(text);
+			
+		})
+		
+		function groupSearch(group){
+			group = group.toLowerCase();
+			var content;
+			var url = "http://192.168.152:8080/group/"+group;
+			if (window.XMLHttpRequest) {
+    			xml = new XMLHttpRequest();
+    			} else {
+    			xml = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				var xml = new XMLHttpRequest();
+				xml.open("GET",url,"false");
+				xml.send();
+				xml.onreadystatechange = function (){
+					if (xml.readyState==4 && xml.status==200){
+					content = xml.responseText;
+					if (content != "success"){
+						document.getElementById("results").style.backgroundColor = "#c30000";
+						document.getElementById("results").innerHTML = "Group Not Found";
+					} else {
+						document.getElementById("results").style.backgroundColor = "rgb(50, 200, 10)";
+						document.getElementById("results").innerHTML = "Enter Password";
+						document.getElementById("password").style.opacity = "1";
+						
+					}
+					}
+				}
+				
+				}
+				function type(num){
+					num = num.toString()
+					if (document.getElementById("b1").innerHTML == ""){
+						document.getElementById("b1").innerHTML = num;
+					} else if (document.getElementById("b2").innerHTML == ""){
+						document.getElementById("b2").innerHTML = num;
+					} else if (document.getElementById("b3").innerHTML == ""){
+						document.getElementById("b3").innerHTML = num;
+					} else if (document.getElementById("b4").innerHTML == ""){
+						document.getElementById("b4").innerHTML = num;
+						pass()
+					}
+				}
+				function pass(){
+					var num1 = document.getElementById("b1").innerHTML;
+					var num2 = document.getElementById("b2").innerHTML;
+					var num3 = document.getElementById("b3").innerHTML;
+					var num4 = document.getElementById("b4").innerHTML;
+					var numbers = num1+num2+num3+num4
+					var group = document.getElementById("group").value;
+					var pwrd = CryptoJS.SHA256(numbers).toString();
+					var url = "http://192.168.0.152:8080/password/"+group+"|"+pwrd; 
+					if (window.XMLHttpRequest) {
+    				xml = new XMLHttpRequest();
+    				} else {
+    				xml = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					var xml = new XMLHttpRequest();
+					var content;
+					xml.open("GET",url,"false");
+					xml.send();
+					xml.onreadystatechange = function (){
+					if (xml.readyState==4 && xml.status==200){
+					content = xml.responseText;
+					if (content == "success"){
+						url = "http://192.168.0.152:8080/index/"+group+"/"+pwrd;
+						window.location = url
+						} else {
+							location.reload();
+						}
+						}
+						
+						}
+				}
+
+</script>
+
+</html>

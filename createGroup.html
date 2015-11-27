@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<link rel='shortcut icon' href='http://gdurl.com/Uotw' type='image/x-icon' />
+	<title>Spre.io Create Group</title>
+</head>
+<style>
+	html {
+		background-color: whitesmoke;
+		font-family: 'Lato', sans-serif;
+	}
+	
+	#div {
+		background-color: rgb(54, 51, 48);
+		width: 500px;
+		height: 500px;
+		color: whitesmoke;
+		font-size: 20px;
+	}
+	#span {
+		font-size: 40px;
+	}
+	#name {
+		border-radius: 5px;
+		color: whitesmoke;
+	}
+	#button {
+		width: 140px;
+		height: 60px;
+		border-radius: 5px;
+		margin-top: 50px;
+		font-size: 30px
+		
+	}
+</style>
+
+<body>
+	<center>
+		<div id="div">
+			<span id="span">Create group</span>
+			<br/>
+			<br/>
+			Group Name
+			<br/>
+			<input type="text" id="name" placeholder="Group Name">
+			<br/>
+			Group Password
+			<br/>
+			<input type="number" class="num" id="n1" min="0" max="9" value="0"/><input type="number" class="num" id="n2" min="0" max="9" value="0"/><input type="number" class="num" id="n3" min="0" max="9" value="0"/><input type="number" class="num" id="n4" min="0" max="9" value="0"/>
+			<br/>
+			<br/>
+			<button id="button" onclick="create()">Create</button>
+		</div>
+	</center>
+</body>
+<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
+<script>
+	document.getElementById("name").addEventListener("input", function (){
+				var text = document.getElementById("name").value;
+				groupSearch(text);
+		})	
+	function groupSearch(group){
+			group = group.toLowerCase();
+			var content;
+			var url = "http://192.168.152:8080/group/"+group;
+			if (window.XMLHttpRequest) {
+    			xml = new XMLHttpRequest();
+    			} else {
+    			xml = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				var xml = new XMLHttpRequest();
+				xml.open("GET",url,"false");
+				xml.send();
+				xml.onreadystatechange = function (){
+					if (xml.readyState==4 && xml.status==200){
+					content = xml.responseText;
+					if (content != "success"){
+						document.getElementById("name").style.backgroundColor = "rgb(50, 200, 10)";
+					} else {
+						document.getElementById("name").style.backgroundColor = "#c30000";
+						
+					}
+					}
+				}
+				
+				}
+				function create(){
+					var nameOfGroup = document.getElementById("name").value.toLowerCase();
+					var p1 = document.getElementById("n1").value;
+					var p2 = document.getElementById("n2").value;
+					var p3 = document.getElementById("n3").value;
+					var p4 = document.getElementById("n4").value;
+					var pass = p1+p2+p3+p4;
+					var fullPass = CryptoJS.SHA256(pass).toString();
+					var url = "http://192.168.0.152:8080/creategroup/"+nameOfGroup+"|"+fullPass;
+					if (window.XMLHttpRequest) {
+    				xml = new XMLHttpRequest();
+    				} else {
+    				xml = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					var xml = new XMLHttpRequest();
+					xml.open("GET",url,"false");
+					xml.send();
+					xml.onreadystatechange = function (){
+					if (xml.readyState==4 && xml.status==200){
+					window.location = "http://192.168.0.152:8080/";
+					}
+				}
+				}
+</script>
+</html>

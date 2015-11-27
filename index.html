@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<link href='https://fonts.googleapis.com/css?family=Lato' rel='stylesheet' type='text/css'>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="utf-8">
+	<link rel='shortcut icon' href='http://gdurl.com/Uotw' type='image/x-icon'/ >
+	<title>Spre.io</title>
+</head>
+<header id="header">
+	<div id="logo"><b>Spre</b></div>
+	<button id="clicker" style="display:none;"></button>
+</header>
+<style>
+	/*logo background color is ff5f5f and letter color is eeeeee*/
+	html,
+	body {
+		margin: 0px;
+		padding: 0px;
+	}
+	
+	html {
+		font-family: 'Lato', sans-serif;
+	}
+	
+	#header {
+		background: whitesmoke;
+		color: rgb(179, 181, 183);
+		height: 70px;
+		top: 0;
+		position: fixed;
+		width: 100%;
+	}
+	
+	body {
+		background-color: rgb(54, 51, 48);
+	}
+	
+	.div {
+		width: 250px;
+		height: auto;
+		float: left;
+		margin: 5px;
+		color: white;
+		font-size: 27px;
+		word-wrap: break-word;
+		border-radius: 10px;
+		clear: both;
+	}
+	
+	footer {
+		background-color: whitesmoke;
+		height: 60px;
+		bottom: 0;
+		position: fixed;
+		width: 100%;
+	}
+	
+	#txtarea {
+		border-radius: 5px;
+		background-color: rgb(212, 212, 212);
+	}
+	
+	#logo {
+		background-color: #ff5f5f;
+		color: #eeeeee;
+		width: 70px;
+		height: 40px;
+		font-size: 30px;
+		margin-top: 13px;
+	}
+	#divi {
+		height: 60px;
+		width: 250px;
+		float: left;
+		margin: 5px;
+		color: transparent;
+		font-size: 27px;
+		word-wrap: break-word;
+		border-radius: 10px;
+		clear: both;
+		bottom: 0;
+	}
+</style>
+
+<body>
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+		<div id="posts">
+			<div class="div" id="0" style="display:none;"></div>
+		</div>
+		<div id="divi">spre</div>
+</body>
+<footer>
+	<center>
+		<input id="txtarea" type="text" height="40px" placeholder="Say Something?" style="font-size:20px; margin-top:10px;"></input>
+	</center>
+	<script>
+		var width = self.innerWidth;
+		width = width-30;
+			if (width > 500){
+				width = "500px";
+			} else {
+				width = width.toString()+"px";
+			}
+			document.getElementById("txtarea").style.width = width;
+			var windowURL = decodeURI(window.location.href.slice(32))
+			var stuff = windowURL.split("/")
+			group = stuff[0]
+			var password = stuff[1]
+			function passCheck(group,pwd){
+				var url = "http://192.168.0.152:8080/password/"+group+"|"+pwd; 
+					if (window.XMLHttpRequest) {
+    				xml = new XMLHttpRequest();
+    				} else {
+    				xml = new ActiveXObject("Microsoft.XMLHTTP");
+					}
+					var xml = new XMLHttpRequest();
+					var content;
+					xml.open("GET",url,"false");
+					xml.send();
+					xml.onreadystatechange = function (){
+					if (xml.readyState==4 && xml.status==200){
+					content = xml.responseText;
+					if (content != "success"){
+						url = "http://192.168.0.152:8080/";
+						window.location = url
+						}
+						}
+						
+						}
+			}
+			passCheck(group,password);
+			
+			if (localStorage.getItem("id"+group) == undefined){
+			var myColo = "000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
+			localStorage.setItem("id"+group, myColo)
+			}
+			
+			myColor = localStorage.getItem("id"+group);
+			
+		document.getElementById("txtarea").addEventListener("keypress", function (e){
+			if (e.keyCode == 13 && isWhitespaceOrEmpty(document.getElementById("txtarea").value) == false){
+				var text1 = document.getElementById("txtarea").value;
+				var text = removeInvals(text1);
+				var postData = encodeURI(group+"|"+myColor+"|"+text);
+				var url = "http://192.168.0.152:8080/post/"+postData;
+				if (window.XMLHttpRequest) {
+    			xml = new XMLHttpRequest();
+    			} else {
+    			xml = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				var xml = new XMLHttpRequest();
+				xml.open("GET",url,"false");
+				xml.send()
+				document.getElementById("txtarea").value = "";
+				getPostData();
+				}
+				})
+		function removeInvals(text1){
+			var text =  text1.split("");
+			while (text.indexOf("'") != -1){
+				text.splice(text.indexOf("'"),1);
+			}
+			while (text.indexOf("#") != -1){
+				text.splice(text.indexOf("#"),1);
+			}
+			while (text.indexOf("\\") != -1){
+				text.splice(text.indexOf("'"),1);
+			}
+			while (text.indexOf("|") != -1){
+				text.splice(text.indexOf("|"),1);
+			}
+			while (text.indexOf('"') != -1){
+				text.splice(text.indexOf('"'),1);
+			}
+			var txt = text.join("");
+			return txt;
+		}
+
+		
+		setInterval(function (){getPostData()},1000);
+		getPostData();
+		
+		function getPostData(){
+			var content;
+			var e = document.getElementsByClassName("div");
+			var num = parseInt(e.length);
+			var lastPost = e[num-1].id.toString();
+			var url = "http://192.168.152:8080/getPosts/"+group+"|"+lastPost
+			if (window.XMLHttpRequest) {
+    			xml = new XMLHttpRequest();
+    			} else {
+    			xml = new ActiveXObject("Microsoft.XMLHTTP");
+				}
+				var xml = new XMLHttpRequest();
+				xml.open("GET",url,"false");
+				xml.send();
+				xml.onreadystatechange = function (){
+					if (xml.readyState==4 && xml.status==200){
+						ds();
+					} else {
+						
+					}
+				}
+				function ds(){
+					content = xml.responseText;
+						if (content != undefined){
+							var data = parse(content);
+							formDivs(data,lastPost);
+						}
+				}
+				window.scroll(1000000000000000000000000000000000000000000000000000000000000000000000,1000000000000000000000000000000000000000000000000000000000000000000000)
+		}
+		
+		
+		function parse(item){
+			var a = [];
+			item = item.split(",");
+			item.forEach(function (b){
+			a.push(b.split("|"))
+			})
+			return a;
+		}
+		
+		function formDivs(array,n){
+			array.forEach(function (a){
+				var pos;
+				if (a[1] == undefined){}else{
+				n = parseInt(n)+1
+				n = n.toString()
+				if (a[0] != '#'+myColor){
+					pos = "right"
+				} else {
+					pos = "left";
+				}
+				var content = "<div id='"+n+"' class='div' style='background-color:"+a[0]+"; float:"+pos+";'> "+a[1]+"</div>"
+				document.getElementById("posts").innerHTML = document.getElementById("posts").innerHTML+content;
+				}
+			})
+		}
+		function isWhitespaceOrEmpty(text) {
+   		return !/[^\s]/.test(text);
+		}
+	</script>
+</footer>
+</html>
