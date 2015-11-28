@@ -203,7 +203,9 @@
 					if (xml.readyState==4 && xml.status==200){
 					content = xml.responseText;
 					if (content == "success"){
-						url = "http://192.168.0.152:8080/index/"+group+"/"+pwrd;
+						var d = new Date()
+						var time = CryptoJS.SHA256(parseInt(d.getFullYear()+d.getDay()+d.getHours()+d.getMinutes()).toString()).toString();
+						url = "http://192.168.0.152:8080/index/"+group+"/"+pwrd+"/"+time;
 						window.location = url
 						} else {
 							location.reload();

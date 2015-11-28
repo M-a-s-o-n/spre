@@ -98,6 +98,7 @@
 	<center>
 		<input id="txtarea" type="text" height="40px" placeholder="Say Something?" style="font-size:20px; margin-top:10px;"></input>
 	</center>
+	<script src="http://crypto-js.googlecode.com/svn/tags/3.1.2/build/rollups/sha256.js"></script>
 	<script>
 		var width = self.innerWidth;
 		width = width-30;
@@ -111,7 +112,12 @@
 			var stuff = windowURL.split("/")
 			group = stuff[0]
 			var password = stuff[1]
-			function passCheck(group,pwd){
+			var time = stuff[2];
+			
+			function passCheck(group,pwd,time){
+				var d = new Date()
+				time2 = CryptoJS.SHA256(parseInt(d.getFullYear()+d.getDay()+d.getHours()+d.getMinutes()).toString()).toString();
+				if (time != time2){url = "http://192.168.0.152:8080/";window.location = url}
 				var url = "http://192.168.0.152:8080/password/"+group+"|"+pwd; 
 					if (window.XMLHttpRequest) {
     				xml = new XMLHttpRequest();
@@ -133,7 +139,7 @@
 						
 						}
 			}
-			passCheck(group,password);
+			passCheck(group,password,time);
 			
 			if (localStorage.getItem("id"+group) == undefined){
 			var myColo = "000000".replace(/0/g,function(){return (~~(Math.random()*16)).toString(16);});
