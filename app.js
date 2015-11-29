@@ -21,21 +21,20 @@ function getData(req) {
 			data = "data";
 		} if (intRequest == "getPosts") {
 			data = getPosts(secReq)
-		} if (intRequest == "") {
+		} if (intRequest == "login") {
 			data = fs.readFileSync("login.html");
 		} if (intRequest == "group"){
 			data = group(secReq);
 		} if (intRequest == "password"){
 			data = password(secReq);
-		}
-		if (intRequest == "index"){
+		} if (intRequest == "index"){
 			data = fs.readFileSync("index.html")
-		}
-		if (intRequest == "creategroup"){
+		} if (intRequest == "creategroup"){
 			data = createGroup(secReq);
-		}
-		if (intRequest == "create"){
+		} if (intRequest == "create"){
 			data = fs.readFileSync("createGroup.html")
+		} if (intRequest == ""){
+			data = "<h1>ERROR 404:</h1><br/>Page Not Found"
 		}
 	return data;
 }
@@ -47,7 +46,7 @@ function post(uri) {
 	var msg = d[2];
 	var posts = DB["group"][group]["msgs"];
 	if (posts == undefined){} else {
-	posts.push(eval("['" + color + "|" + msg + "']"));}
+	posts.push(eval('["' + color + "|" + msg + '"]'));}
 	return "Done"
 }
 function getPosts(uri) {
