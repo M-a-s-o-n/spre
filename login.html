@@ -205,7 +205,7 @@
 					if (content == "success"){
 						var d = new Date()
 						var time = CryptoJS.SHA256(parseInt(d.getFullYear()+d.getDay()+d.getHours()+d.getMinutes()).toString()).toString();
-						url = "http://192.168.0.152:8080/index/"+group+"/"+pwrd+"/"+time;
+						url = "http://192.168.0.152:8080/chat/"+group+"/"+pwrd+"/"+time;
 						window.location = url
 						} else {
 							location.reload();

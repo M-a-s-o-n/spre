@@ -6,7 +6,7 @@ DB = JSON.parse(DB);
 setInterval(function () {
 	fs.writeFileSync("appDB.json", JSON.stringify(DB));
 }, 3600000);
-var html = fs.readFileSync("index.html");
+var chat = fs.readFileSync("chat.html");
 var login = fs.readFileSync("login.html");
 var createGroupHtml = fs.readFileSync("createGroup.html");
 var server = http.createServer(function (request, response) {
@@ -30,8 +30,8 @@ function getData(req) {
 			data = group(secReq);
 		} if (intRequest == "password"){
 			data = password(secReq);
-		} if (intRequest == "index"){
-			data = html;
+		} if (intRequest == "chat"){
+			data = chat;
 		} if (intRequest == "creategroup"){
 			data = createGroup(secReq);
 		} if (intRequest == "create"){
