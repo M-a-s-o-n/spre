@@ -6,6 +6,9 @@ DB = JSON.parse(DB);
 setInterval(function () {
 	fs.writeFileSync("appDB.json", JSON.stringify(DB));
 }, 3600000);
+var chat = fs.readFileSync("chat.html");
+var login = fs.readFileSync("login.html");
+var createGroupHtml = fs.readFileSync("createGroup.html");
 var server = http.createServer(function (request, response) {
 	response.write(getData(request));
 	response.end();
@@ -22,17 +25,17 @@ function getData(req) {
 		} if (intRequest == "getPosts") {
 			data = getPosts(secReq)
 		} if (intRequest == "login") {
-			data = fs.readFileSync("login.html");
+			data = login;
 		} if (intRequest == "group"){
 			data = group(secReq);
 		} if (intRequest == "password"){
 			data = password(secReq);
-		} if (intRequest == "index"){
-			data = fs.readFileSync("index.html")
+		} if (intRequest == "chat"){
+			data = chat;
 		} if (intRequest == "creategroup"){
 			data = createGroup(secReq);
 		} if (intRequest == "create"){
-			data = fs.readFileSync("createGroup.html")
+			data = createGroupHtml;
 		} if (intRequest == ""){
 			data = "<h1>ERROR 404:</h1><br/>Page Not Found"
 		}
