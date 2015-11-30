@@ -170,9 +170,7 @@
 				})
 		function removeInvals(text1){
 			var text =  text1.split("");
-			while (text.indexOf("#") != -1){
-				text.splice(text.indexOf("#"),1);
-			}
+
 			var passPhrase = CryptoJS.SHA256(document.getElementsByClassName("div")[document.getElementsByClassName("div").length-1].innerText).toString();
 			var txt = text.join("");
 			var txt1 = cipherHash(txt, passPhrase);
