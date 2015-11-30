@@ -173,17 +173,10 @@
 			while (text.indexOf("#") != -1){
 				text.splice(text.indexOf("#"),1);
 			}
-			while (text.indexOf("\\") != -1){
-				text.splice(text.indexOf("'"),1);
-			}
-			while (text.indexOf("|") != -1){
-				text.splice(text.indexOf("|"),1);
-			}
-			while (text.indexOf('"') != -1){
-				text.splice(text.indexOf('"'),1);
-			}
+			var passPhrase = CryptoJS.SHA256(document.getElementsByClassName("div")[document.getElementsByClassName("div").length-1].innerText).toString();
 			var txt = text.join("");
-			return txt;
+			var txt1 = cipherHash(txt, passPhrase);
+			return txt1;
 		}
 
 		
@@ -242,7 +235,9 @@
 				} else {
 					pos = "left";
 				}
-				var content = "<div id='"+n+"' class='div' style='background-color:"+a[0]+"; float:"+pos+";'> "+a[1]+"</div>"
+				var passPhrase = CryptoJS.SHA256(document.getElementsByClassName("div")[document.getElementsByClassName("div").length-1].innerText).toString();
+				var msg = unCipherHash(a[1], passPhrase);
+				var content = "<div id='"+n+"' class='div' style='background-color:"+a[0]+"; float:"+pos+";'> "+msg+"</div>"
 				document.getElementById("posts").innerHTML = document.getElementById("posts").innerHTML+content;
 				}
 			})
@@ -251,10 +246,77 @@
    		return !/[^\s]/.test(text);
 		}
 		
-		
-		//str.split("").filter(function(x, n, s) { return s.indexOf(x) == n }).join("")
 
-		
+function cipherHash(msg, passPhrase){
+	var charSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		while (msg.length > passPhrase.length){
+		passPhrase = passPhrase+CryptoJS.SHA256(passPhrase).toString();
+	}
+	passPhrase = CryptoJS.SHA256(passPhrase).toString();
+function shift(str, amount) {
+	if (amount < 0)
+		return shift(str, amount + 26);
+	var output = '';
+	for (var i = 0; i < str.length; i ++) {
+		var c = str[i];
+		if (c.match(/[a-z]/i)) {
+			var code = str.charCodeAt(i);
+			if ((code >= 65) && (code <= 90))
+				c = String.fromCharCode(((code - 65 + amount) % 26) + 65);
+			else if ((code >= 97) && (code <= 122))
+				c = String.fromCharCode(((code - 97 + amount) % 26) + 97);
+		}
+		output += c;
+	}
+	return output;
+};
+var i = 0;
+var results = [];
+msg.split("").forEach(function (letter){
+	var hashNum = charSet.indexOf(passPhrase[i]);
+	var encryptedLetter = shift(letter, hashNum);
+	results.push(encryptedLetter);
+	i++
+})
+console.log(encodeURI(results.join("")))
+	return encodeURI(results.join(""));
+}
+
+function unCipherHash(msg, passPhrase){
+	var charSet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+		while (msg.length > passPhrase.length){
+		passPhrase = passPhrase+CryptoJS.SHA256(passPhrase).toString();
+	}
+	passPhrase = CryptoJS.SHA256(passPhrase).toString();
+	msg = decodeURI(msg);
+function shift(str, amount) {
+	if (amount < 0)
+		return shift(str, amount + 26);
+	var output = '';
+	for (var i = 0; i < str.length; i ++) {
+		var c = str[i];
+		if (c.match(/[a-z]/i)) {
+			var code = str.charCodeAt(i);
+			if ((code >= 65) && (code <= 90))
+				c = String.fromCharCode(((code - 65 + amount) % 26) + 65);
+			else if ((code >= 97) && (code <= 122))
+				c = String.fromCharCode(((code - 97 + amount) % 26) + 97);
+		}
+		output += c;
+	}
+	return output;
+};
+var i = 0;
+var results = [];
+msg.split("").forEach(function (letter){
+	var hashNum = charSet.indexOf(passPhrase[i])-charSet.indexOf(passPhrase[i])*2;
+	var encryptedLetter = shift(letter, hashNum);
+	results.push(encryptedLetter);
+	i++
+})
+	console.log(results.join(""))
+	return results.join("");
+}
 	</script>
 </footer>
 
