@@ -22,21 +22,21 @@ function getData(req) {
 		if (intRequest == "post") {
 			post(secReq);
 			data = "data";
-		} if (intRequest == "getPosts") {
+		} else (intRequest == "getPosts") {
 			data = getPosts(secReq)
-		} if (intRequest == "login") {
+		} else (intRequest == "login") {
 			data = login;
-		} if (intRequest == "group"){
+		} else (intRequest == "group"){
 			data = group(secReq);
-		} if (intRequest == "password"){
+		} else (intRequest == "password"){
 			data = password(secReq);
-		} if (intRequest == "chat"){
+		} else (intRequest == "chat"){
 			data = chat;
-		} if (intRequest == "creategroup"){
+		} else (intRequest == "creategroup"){
 			data = createGroup(secReq);
-		} if (intRequest == "create"){
+		} else (intRequest == "create"){
 			data = createGroupHtml;
-		} if (intRequest == ""){
+		} else (intRequest == ""){
 			data = "<h1>ERROR 404:</h1><br/>Page Not Found"
 		}
 	return data;
